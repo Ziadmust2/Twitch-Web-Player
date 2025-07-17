@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <title>Twitch Viewer with Search</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       background-color: #0e0e10;
@@ -23,7 +21,6 @@
       gap: 10px;
       align-items: center;
       justify-content: center;
-      flex-wrap: wrap;
     }
     input[type="text"] {
       padding: 8px;
@@ -67,7 +64,6 @@
   <header>
     <input type="text" id="streamerInput" placeholder="Enter Twitch username..." />
     <button onclick="loadStream()">Watch Stream</button>
-    <button onclick="jumpToLive()">Jump to Live</button>
   </header>
 
   <!-- 🖥️ Main Viewer -->
@@ -86,26 +82,17 @@
     </div>
   </main>
 
-  <!-- 🧠 Script to Load and Jump -->
+  <!-- 🧠 Script to Load Stream -->
   <script>
     function loadStream() {
       const username = document.getElementById("streamerInput").value.trim().toLowerCase();
       if (!username) return;
 
       const parent = "ziadmust2.github.io";
-      const playerFrame = document.getElementById("playerFrame");
-      const chatFrame = document.getElementById("chatFrame");
-
-      playerFrame.src = `https://player.twitch.tv/?channel=${username}&parent=${parent}`;
-      chatFrame.src = `https://www.twitch.tv/embed/${username}/chat?parent=${parent}`;
-    }
-
-    function jumpToLive() {
-      const iframe = document.getElementById("playerFrame");
-      const currentSrc = iframe.src;
-
-      // Reload the stream iframe to jump to live
-      iframe.src = currentSrc;
+      document.getElementById("playerFrame").src = 
+        `https://player.twitch.tv/?channel=${username}&parent=${parent}`;
+      document.getElementById("chatFrame").src = 
+        `https://www.twitch.tv/embed/${username}/chat?parent=${parent}`;
     }
   </script>
 
