@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Twitch Viewer with Chat</title>
+  <title>Twitch Viewer with Search</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,10 +11,40 @@
       margin: 0;
       background-color: #0e0e10;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       height: 100vh;
-      overflow: hidden;
       font-family: sans-serif;
+      color: white;
+    }
+    header {
+      padding: 10px;
+      background-color: #18181b;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    input[type="text"] {
+      padding: 8px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      width: 300px;
+    }
+    button {
+      padding: 8px 12px;
+      font-size: 16px;
+      background-color: #9147ff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      height: 100%;
     }
     .player {
       flex: 1;
@@ -22,7 +52,6 @@
     .chat {
       width: 350px;
       border-left: 1px solid #333;
-      height: 100vh;
     }
     iframe {
       border: none;
@@ -33,20 +62,42 @@
 </head>
 <body>
 
-  <!-- ✅ Twitch Stream Player -->
-  <div class="player">
-    <iframe
-      src="https://player.twitch.tv/?channel=kingsammelot&parent=Ziadmust2.github.io"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <!-- 🔍 Stream Search Bar -->
+  <header>
+    <input type="text" id="streamerInput" placeholder="Enter Twitch username..." />
+    <button onclick="loadStream()">Watch Stream</button>
+  </header>
 
-  <!-- ✅ Twitch Chat Embed -->
-  <div class="chat">
-    <iframe
-      src="https://www.twitch.tv/embed/kingsammelot/chat?parent=Ziadmust2.github.io">
-    </iframe>
-  </div>
+  <!-- 🖥️ Main Viewer -->
+  <main>
+    <div class="player">
+      <iframe id="playerFrame"
+        src="https://player.twitch.tv/?channel=kai_cenat&parent=Ziadmust2.github.io"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="chat">
+      <iframe id="chatFrame"
+        src="https://www.twitch.tv/embed/kai_cenat/chat?parent=Ziadmust2.github.io">
+      </iframe>
+    </div>
+  </main>
+
+  <!-- 🧠 Script to Load Stream -->
+  <script>
+    function loadStream() {
+      const username = document.getElementById("streamerInput").value.trim().toLowerCase();
+      if (!username) return;
+
+      const parent = "YOUR_GITHUB_USERNAME.github.io";
+      const playerFrame = document.getElementById("playerFrame");
+      const chatFrame = document.getElementById("chatFrame");
+
+      playerFrame.src = `https://player.twitch.tv/?channel=${username}&parent=${parent}`;
+      chatFrame.src = `https://www.twitch.tv/embed/${username}/chat?parent=${parent}`;
+    }
+  </script>
 
 </body>
 </html>
