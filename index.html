@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Twitch Viewer with Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background-color: #0e0e10;
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    .player {
+      flex: 1;
+    }
+    .chat {
+      width: 350px;
+      border-left: 1px solid #333;
+      height: 100vh;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Twitch Stream Player -->
+  <div class="player">
+    <iframe
+      src="https://player.twitch.tv/?channel=kingsammelot&parent=Ziadmust2.github.io"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <!-- ✅ Twitch Chat Embed -->
+  <div class="chat">
+    <iframe
+      src="https://www.twitch.tv/embed/kingsammelot/chat?parent=Ziadmust2.github.io">
+    </iframe>
+  </div>
+
+</body>
+</html>
