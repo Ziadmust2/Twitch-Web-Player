@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <title>Twitch Viewer with Search</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Twitch Web Player</title>
-  <script src="https://player.twitch.tv/js/embed/v1.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -12,11 +11,11 @@
     body {
       margin: 0;
       background-color: #0e0e10;
-      font-family: sans-serif;
-      color: white;
       display: flex;
       flex-direction: column;
       height: 100vh;
+      font-family: sans-serif;
+      color: white;
     }
     header {
       padding: 10px;
@@ -28,20 +27,20 @@
       justify-content: center;
     }
     input[type="text"] {
-      padding: 10px;
-      font-size: 18px;
+      padding: 8px;
+      font-size: 16px;
       border: none;
-      border-radius: 6px;
-      width: 80%;
-      max-width: 300px;
+      border-radius: 4px;
+      width: 250px;
+      max-width: 80vw;
     }
     button {
-      padding: 10px 14px;
-      font-size: 18px;
+      padding: 8px 12px;
+      font-size: 16px;
       background-color: #9147ff;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
     }
     main {
@@ -49,7 +48,6 @@
       display: flex;
       flex-direction: row;
       height: 100%;
-      position: relative;
     }
     .player {
       flex: 1;
@@ -64,19 +62,7 @@
       width: 100%;
       height: 100%;
     }
-    #twitch-embed {
-      width: 100%;
-      height: 100%;
-    }
-    .controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    /* Hidden on mobile by default */
-    .chat.hidden {
+    .hidden {
       display: none;
     }
 
@@ -95,73 +81,67 @@
 </head>
 <body>
 
+  <!-- 🔍 Stream Search Bar & Controls -->
   <header>
     <input type="text" id="streamerInput" placeholder="Enter Twitch username..." />
-    <button onclick="loadStream()">Watch</button>
+    <button onclick="loadStream()">Watch Stream</button>
     <button onclick="toggleChat()">Toggle Chat</button>
-    <button onclick="goFullscreen()">Fullscreen</button>
   </header>
 
+  <!-- 🖥️ Main Viewer -->
   <main>
-    <div class="player" id="player-container">
-      <div id="twitch-embed"></div>
-    </div>
-    <div class="chat hidden" id="chat">
-      <iframe id="chatFrame"
-        src="https://www.twitch.tv/embed/kai_cenat/chat?parent=ziadmust2.github.io">
+    <div class="player">
+      <iframe id="playerFrame"
+        src="https://player.twitch.tv/?channel=kai_cenat&parent=ziadmust2.github.io"
+        allowfullscreen>
       </iframe>
+    </div>
+
+    <div class="chat hidden" id="chat">
+      <!-- Chat will be dynamically injected here -->
     </div>
   </main>
 
+  <!-- 🧠 Script to Load Stream and Chat -->
   <script>
-    let player;
-    const parent = "ziadmust2.github.io";
+    let chatVisible = false;
+    const chatDiv = document.getElementById("chat");
 
     function loadStream() {
       const username = document.getElementById("streamerInput").value.trim().toLowerCase();
       if (!username) return;
 
-      // Replace embed
-      document.getElementById("twitch-embed").innerHTML = "";
-      player = new Twitch.Embed("twitch-embed", {
-        width: "100%",
-        height: "100%",
-        channel: username,
-        parent: [parent],
-        autoplay: true
-      });
+      const parent = "ziadmust2.github.io";
+      const playerFrame = document.getElementById("playerFrame");
 
-      // Update chat
-      document.getElementById("chatFrame").src =
-        `https://www.twitch.tv/embed/${username}/chat?parent=${parent}`;
-    }
+      // Update stream player
+      playerFrame.src = `https://player.twitch.tv/?channel=${username}&parent=${parent}`;
 
-    function toggleChat() {
-      const chat = document.getElementById("chat");
-      chat.classList.toggle("hidden");
-    }
-
-    function goFullscreen() {
-      const elem = document.getElementById("player-container");
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
+      // Update chat if visible
+      if (chatVisible) {
+        chatDiv.innerHTML = `
+          <iframe id="chatFrame"
+            src="https://www.twitch.tv/embed/${username}/chat?parent=${parent}"
+            style="width:100%;height:100%;border:none;"></iframe>`;
       }
     }
 
-    // Default stream on load
-    window.onload = () => {
-      player = new Twitch.Embed("twitch-embed", {
-        width: "100%",
-        height: "100%",
-        channel: "kai_cenat",
-        parent: [parent],
-        autoplay: true
-      });
-    };
+    function toggleChat() {
+      chatVisible = !chatVisible;
+      const username = document.getElementById("streamerInput").value.trim().toLowerCase() || "kai_cenat";
+      const parent = "ziadmust2.github.io";
+
+      if (chatVisible) {
+        chatDiv.classList.remove("hidden");
+        chatDiv.innerHTML = `
+          <iframe id="chatFrame"
+            src="https://www.twitch.tv/embed/${username}/chat?parent=${parent}"
+            style="width:100%;height:100%;border:none;"></iframe>`;
+      } else {
+        chatDiv.classList.add("hidden");
+        chatDiv.innerHTML = "";
+      }
+    }
   </script>
 
 </body>
